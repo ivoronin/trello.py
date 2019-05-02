@@ -1,0 +1,4 @@
+arrow==0.13.1
+furl==2.0.0
+orderedmultidict==1.0
+requests==2.21.0

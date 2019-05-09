@@ -20,13 +20,13 @@ class API:
         self._token = token
         self._session = _Session()
 
-    def _build_url(self, path_segments, params, version=1):
+    def _build_url(self, version, path_segment, params):
         url = furl('https://api.trello.com')
-        url.path.segments = [version, *path_segments]
+        url.path = url.path / version / path_segment
         url.args = {**{'key': self._key, 'token': self._token}, **(params or {})}
         return url.url
 
-    def get_collection(self, cls, path_segments, params=None):
+    def get_collection(self, cls, path_segment, params=None):
         """
         Get collection of resources
 
@@ -38,23 +38,23 @@ class API:
         Returns:
             :class:`trello.resource.ResourceCollection`
         """
-        response = self.make_request('GET', path_segments, params)
+        response = self.make_request('GET', path_segment, params)
         json_objs = response.json()
         return ResourceCollection.from_json(cls, json_objs, self)
 
-    def make_request(self, method, path_segments, params=None):
+    def make_request(self, method, path_segment, params=None, version='1'):
         """
         Make HTTP request
 
         Arguments:
             method (str): HTTP method
-            path_segments (list): URL path segments
+            path_segment (list): URL path segments
             params (dict, optional): Query parameters
 
         Returns:
             requests.Response
         """
-        url = self._build_url(path_segments, params)
+        url = self._build_url(version, path_segment, params)
         response = self._session.request(method, url)
         response.raise_for_status()
         return response
@@ -99,4 +99,4 @@ class Client:
             :class:`trello.ResourceCollection`: dict with board names
             as keys and :class:`trello.Board` instances as values
         """
-        return self._api.get_collection(Board, ['members', 'me', 'boards'])
+        return self._api.get_collection(Board, 'members/me/boards')

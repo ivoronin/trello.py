@@ -12,4 +12,4 @@ class List(Resource):
             :class:`trello.ResourceCollection`: dict with card names
             as keys and :class:`trello.Card` instances as values
         """
-        return self._get_child_collection(Card, params={'customFieldItems': 'true'}).values()
+        return self._get_child_collection(Card, {'customFieldItems': 'true'}).values()

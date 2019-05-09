@@ -42,7 +42,8 @@ class Resource:
         return self._json['name']
 
     def _get_child_collection(self, cls, params=None):
-        return self._api.get_collection(cls, (self._path, self.id, cls._path), params) # pylint: disable=E1101,E1101
+        path_segment = f'{self._path}/{self.id}/{cls._path}' # pylint: disable=E1101,W0212
+        return self._api.get_collection(cls, path_segment, params)
 
     def __eq__(self, other):
         if not isinstance(other, Resource):

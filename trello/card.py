@@ -71,7 +71,7 @@ class Card(Resource):
         Args:
             label (:class:`trello.Label`): Label to add
         """
-        self._api.make_request('POST', ['cards', self.id, 'idLabels'], {'value': label.id})
+        self._api.make_request('POST', f'cards/{self.id}/idLabels', {'value': label.id})
 
     def remove_label(self, label):
         """
@@ -80,7 +80,7 @@ class Card(Resource):
         Args:
             label (:class:`trello.Label`): Label to remove
         """
-        self._api.make_request('DELETE', ['cards', self.id, 'idLabels', label.id])
+        self._api.make_request('DELETE', f'cards/{self.id}/idLabels/{label.id}')
 
     def is_in_list(self, lst):
         """
@@ -111,4 +111,4 @@ class Card(Resource):
         Args:
             target_list (:class:`trello.List`): Target list
         """
-        self._api.make_request('PUT', ['cards', self.id], params={'idList': target_list.id})
+        self._api.make_request('PUT', f'cards/{self.id}', {'idList': target_list.id})
